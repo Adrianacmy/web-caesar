@@ -51,10 +51,13 @@ def index():
 
 @app.route('/', methods=['POST'])
 def encrypt():
-    rot = int(request.form['rot'])
-    text = request.form['text']
-    if text == '':
-        index()
+    #Be skeptical about user input
+    try:
+        rot = int(request.form['rot'])
+        text = request.form['text']
+    except ValueError:
+        return index()
+
     encrypted = encrypt_c(text, rot)
     return form.format(encrypted)
    
