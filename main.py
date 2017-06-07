@@ -8,27 +8,27 @@ form = '''
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link href="style.css" rel="stylesheet">
         <style>
-            form {
+            form {{
             background-color: #eee;
             padding: 20px;
             margin: 0 auto;
             width: 540px;
             font: 16px sans-serif;
             border-radius: 10px;
-        }
+        }}
 
-        textarea {
+        textarea {{
             margin: 10px 0;
             width: 540px;
             height: 120px;
-        }
+        }}
         </style>
     </head>
     <body>
         <form method='post'>
             <label for="rot">Rotate by:</label>
             <input id='rot' type="text" name="rot" value='0'>
-            <textarea name="text"></textarea>
+            <textarea name="text">{0}</textarea>
             <input type="submit">
         </form>
     </body>
@@ -47,13 +47,17 @@ app.config['DEBUG'] = True
 
 @app.route('/')
 def index():
-    return form
+    return form.format('')
 
 @app.route('/', methods=['POST'])
 def encrypt():
     rot = int(request.form['rot'])
     text = request.form['text']
+    if text == '':
+        index()
     encrypted = encrypt_c(text, rot)
-    return '<h1>' + encrypted + '</h1>'
+    return form.format(encrypted)
+   
+
 
 app.run()
